@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('donor_count', models.IntegerField()),
                 ('material_type', models.CharField(max_length=255)),
                 ('last_updated', models.DateField()),
-                ('collection', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='SampleApp.collection')),
+                ('collection', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Farm360.collection')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

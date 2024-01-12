@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("SampleApp", "0001_initial"),
+        ("Farm360", "0001_initial"),
     ]
 
     operations = [

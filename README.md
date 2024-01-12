@@ -36,7 +36,7 @@ The minimum viable product includes the following features:
 ## Project Structure
 
 - **/Tissue-Sample-Collection-master**: Root directory of the project.
-  - **/SampleApp**: Source code for the web application.
+  - **/Farm360**: Source code for the web application.
   - **/templates**: HTML templates.
   - **/static**: Static files (CSS, JavaScript).
   - **/venv**: Virtual environment for Python dependencies.
@@ -72,7 +72,7 @@ The minimum viable product includes the following features:
 
     #Running Tests
 
-    cd SampleApp/
+    cd Farm360/
 
     pytest -s tests.py
 
