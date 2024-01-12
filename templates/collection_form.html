@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Collection | Sample Sphere{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Create a New Collection</h2>
+    <div class="row">
+      <form class="col s12" method="post" action="{% url 'create_collection' %}">
+        {% csrf_token %}
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="title" type="text" class="validate" name="title" required>
+            <label for="title">Title</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="disease_term" type="text" class="validate" name="disease_term" required>
+            <label for="disease_term">Disease Term</label>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn waves-effect waves-light" type="submit">Create Collection</button>
+          <a href="{% url 'home' %}" class="waves-effect waves-light btn-flat right">Back to Home</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

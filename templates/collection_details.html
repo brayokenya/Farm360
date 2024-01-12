@@ -1,0 +1,73 @@
+<!-- templates/collection_details.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <h4 class="header">{{ collection.title }}</h4>
+        <p class="lead">Disease Term: {{ collection.disease_term }}</p>
+
+        <!-- Samples Section -->
+        <div class="card mt-4">
+          <div class="card-content">
+            <span class="card-title">Samples</span>
+            <table class="highlight responsive-table">
+              <thead>
+                <tr>
+                  <th>Collection ID</th>
+                  <th>Donor Count</th>
+                  <th>Material Type</th>
+                  <th>Last Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for sample in samples %}
+                  <tr>
+                    <td>{{ sample.collection_id }}</td>
+                    <td>{{ sample.donor_count }}</td>
+                    <td>{{ sample.material_type }}</td>
+                    <td>{{ sample.last_updated }}</td>
+                    <td>
+                      <!-- Update button -->
+                      <a href="{% url 'update_sample' sample.id %}" class="waves-effect waves-light btn orange">Update</a>
+                      <!-- Delete button -->
+                      <a href="{% url 'sample_delete' sample.id %}" class="waves-effect waves-light btn red">Delete</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Create New Sample Section -->
+        <div class="card mt-4">
+          <div class="card-content">
+            <span class="card-title">Create New Sample</span>
+            <form method="post" action="{% url 'add_sample' collection.id %}">
+              {% csrf_token %}
+
+              <div class="input-field">
+                <input id="donor_count" type="number" class="validate" name="donor_count" required>
+                <label for="donor_count">Donor Count</label>
+              </div>
+
+              <div class="input-field">
+                <input id="material_type" type="text" class="validate" name="material_type" required>
+                <label for="material_type">Material Type</label>
+              </div>
+
+              <button type="submit" class="btn waves-effect waves-light">Create Sample</button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <a href="{% url 'home' %}" class="waves-effect waves-light btn-flat right">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

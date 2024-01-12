@@ -1,0 +1,67 @@
+<!-- landing_page.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Welcome to Sample Sphere{% endblock %}
+
+{% block content %}
+
+  <!-- Hero section -->
+  <section class="hero text-center">
+    <div class="container">
+      <h1 class="display-4">Welcome to Sample Sphere</h1>
+      <p class="lead">Your platform for managing collections and samples</p>
+      <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Get Started</a>
+      <a href="{% url 'login' %}" class="btn btn-secondary btn-lg">Log In</a>
+    </div>
+  </section>
+
+  <!-- Features section -->
+  <section class="features text-center py-5">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="row mt-4">
+        <div class="col-md-3">
+          <div class="feature-item">
+            <img src="https://images.unsplash.com/photo-1468322638156-074863f9362e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width="150" 
+            height="150" alt="Feature Image" class="mb-3 rounded">
+            <h3>Create</h3>
+            <p>Organize your samples into collections for easy management.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-item">
+            <img src="https://images.unsplash.com/photo-1521714161819-15534968fc5f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width="150" 
+            height="150" alt="Feature Image" class="mb-3 rounded"">
+            <h3>Read</h3>
+            <p>Effortlessly add and track samples within your collections.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-item">
+            <img src="https://images.unsplash.com/photo-1512314889357-e157c22f938d?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width="150" 
+            height="150" alt="Feature Image" class="mb-3 rounded"">
+            <h3>Update</h3>
+            <p>Edit and update information in your collections seamlessly.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-item">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACoCAMAAABt9SM9AAAAclBMVEUAAAD///9cXFwmJiYgICBubm7y8vKtra2SkpKEhITY2NgrKyvn5+doaGiOjo4vLy+fn5/FxcUZGRnm5uY/Pz+Xl5f5+fnt7e1YWFhhYWGdnZ18fHzb29vLy8upqanAwMAMDAy2trZHR0c3NzdOTk51dXUG8AN2AAAECElEQVR4nO3a6XqiMBiGYSouxepIXaq4YmvP/xQngBCSEDCMOF7tc/9qk3wsrxAR8DwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICndN6PFfuN4wJO+QL2u0428JmMXzQDxwVMisrXTjbwmez1sKaOC/hpYfWDIPiy9B3f35OD6z13eN0FTgfXKC07tQ9LbNxnu8pOLOvPrp3olv+J6MYt1tE+rCc7Jpf1Z1fw38P6066yE0lYkb1bDWv/y8PyYs87iHnJ0quGFcfeVDTMHFfxc8Ly0rPrYOlSwxIIi7BuF6xW29Fo5Fd1NYb1dh7l+pbl14S1K4oDpT1M246i8nDMRxixzYpVn6371oWB2Kyqy63msJbymvXNsvCasE5FsTprrvXr4ZeKo/9T9ll3rAsDy9nVHNaX3OKqQzNRE9a5KD4p7fLa/wnDmn4Mh5/+bK6314U1exP8i6i8WvpJi3l8VYU1T6vn56L6PE8a8i3YZ42iUi6+dOyl6/E3Rd9HWlyx6s6ITTvqbXVhZZ/pUPZ96A1eMdAIa5tVy5nqO2tY6ZWBXinE2diFMvCxB5iYJ0K9rTmstewb6g1eMdAIa5VVy0n7GtarXln1bRhnH8teGVj5OXXmTkeWU1iyfecelnFkPTCsTW+zGo/VabQhrKOoURYwcgnr0ovkN/Bb1NsMHcLabqLSqkXx6aFheekufCgNDWEZe7JyCcsYuHYI61tvPD57WMbs+2vCmg4Gq8NBvThsCGskasqmZ5ewooFW7XIahvqqH3saDlt9GxqcJniDywRveGBY61bfhr83LI6sWwySnzt93+nnTrJrc99kLNwWlldRPNcrbWEFN626E21+SFv2xGQN65bKm78NH+fmWzTRS+2lQ6UfFVYQhtttGFbdu1PDSgdu84Gi630blmJYhQnzbowtLDFeXoRfjml1T6+UYS3FiDj9KwnrtA1LOaa1oforXLbf83HazbeV1UdhxqQ6tMyyNRO83N/m34bJDJBNabbfhuoFtWw3v3Pa+6ewHnfXIZJhZWONuw62sBZGe0t+3ztNJpU3sfv9+I9Yld+/SgaWbmgOJ4mxl3fPx9eG0gLS9uSMi5O//LjoCtbJ2HUQ58Xf1wZlCxblEdP1ZHENa5Gu6VCs2kv/n+w93X3DqnvIarwYUjVwJrtjvc+4k268KHAuuk5619WoGGE83y3d/rft3v3Dsj2+N145qhpY2mLjMmfRuACXsNrcg79/WLYXQ4wjq2pg3dOd5iPL9nRHknEaR9bl1rDuNcHPo15ku/C99FSVA8UCcrHet2lcwGfRZ3u1aFmMuNhXbX1bI+t2fWMRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+Dn+AvacOXndIYLkAAAAAElFTkSuQmCC" width="150" 
+            height="150" alt="Feature Image" class="mb-3 rounded"">
+            <h3>Delete</h3>
+            <p>Remove unnecessary data and streamline your collections.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta text-center">
+    <div class="container">
+      <h2>Ready to get started?</h2>
+      <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Sign Up Now</a>
+    </div>
+  </section>
+{% endblock %}

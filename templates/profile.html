@@ -1,0 +1,29 @@
+<!-- templates/profile.html -->
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Profile | Sample Sphere{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col s12 l8 offset-l2">
+        <div class="card-panel grey lighten-5 z-depth-1">
+          <div class="row valign-wrapper">
+            <div class="col s12 m4">
+              <!-- Replace the existing image source with the new placeholder image -->
+              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" alt="Profile Picture" class="circle responsive-img" style="width: 150px;">
+            </div>
+            <div class="col s12 m8">
+              <h5>{{ user.username }}</h5>
+              <p><strong>Email:</strong> {{ user.email }}</p>
+              <!-- Add more profile information as needed -->
+              <p><strong>Bio:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
