@@ -1,0 +1,28 @@
+<!-- livestock_list.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Livestock List | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Livestock List</h2>
+    <ul class="collection">
+        <p>Number of livestock: {{ livestock_list|length }}</p>
+      {% for livestock in livestock_list %}
+        <li class="collection-item">
+          <strong>{{ livestock.name }}</strong> - {{ livestock.livestock_type }} ({{ livestock.sex }})
+          <br>
+          Status: {{ livestock.status }}
+          <br>
+          ID: {{ livestock.identification_number }}
+          <br>
+          <a href="{% url 'livestock_detail' livestock.id %}">Details</a>
+        </li>
+      {% empty %}
+        <li class="collection-item">No livestock records found.</li>
+      {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}" class="waves-effect waves-light btn">Back Home</a>
+  </div>
+{% endblock %}

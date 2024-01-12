@@ -1,15 +1,12 @@
 from django.contrib import admin
-from .models import Collection, Sample
+from .models import Event, Livestock
 
 
-@admin.register(Collection)
-class CollectionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'disease_term', 'title')
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'title','start_date','end_date','description')
 
-@admin.register(Sample)
-class SampleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'display_collection', 'user', 'donor_count', 'material_type', 'last_updated')
 
-    def display_collection(self, obj):
-        return obj.collection.title  
-    display_collection.short_description = 'Collection'
+@admin.register(Livestock)
+class LivestockAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'livestock_type', 'name', 'sex', 'identification_number', 'status')

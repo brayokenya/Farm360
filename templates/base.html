@@ -119,6 +119,28 @@
 </script>
 
 
+<!-- Include jQuery and jQuery UI in the head section -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<!-- Additional head content if needed -->
+
+<script>
+    // Initialize date pickers
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd',  // Set the desired date format
+            showAnim: 'slideDown',   // You can customize the animation
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+</script>
+
+
+
+
 </body>
 
 </html>

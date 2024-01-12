@@ -1,14 +1,54 @@
-from django.contrib.auth.models import User
 from django.db import models
+from django.contrib.auth.models import User
 
-class Collection(models.Model):
+
+
+
+class Event(models.Model):
+    """
+    Model to represent an event.
+
+    Attributes:
+        user (User): The user associated with the event.
+        title (str): The title of the event.
+        start_date (datetime): The start date and time of the event.
+        end_date (datetime): The end date and time of the event.
+        description (str): A text description of the event.
+        occurrence_rate (OccurrenceRate): The occurrence rate settings for the event.
+    """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    disease_term = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    description = models.TextField()
 
-class Sample(models.Model):
+    def __str__(self):
+        return self.title
+        
+
+
+class Livestock(models.Model):
+    STATUS_CHOICES = [
+        ('alive', 'Alive'),
+        ('sold', 'Sold'),
+        ('slaughtered', 'Slaughtered'),
+    ]
+
+    SEX_CHOICES = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
-    donor_count = models.IntegerField()
-    material_type = models.CharField(max_length=255)
-    last_updated = models.DateTimeField(auto_now=True)
+    livestock_type = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    sex = models.CharField(max_length=10, choices=SEX_CHOICES)
+    identification_number = models.CharField(max_length=50, unique=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='alive')
+    physical_characteristics = models.TextField()
+    birth_date = models.DateField()
+    vet_contacts = models.TextField()
+
+    def __str__(self):
+        return self.name

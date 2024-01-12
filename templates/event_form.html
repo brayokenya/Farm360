@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Event | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Create an Event</h2>
+    <div class="row">
+      <form class="col s12" method="post" action="{% url 'create_event' %}">
+        {% csrf_token %}
+        <!-- Include a hidden input field for the user -->
+        <input type="hidden" name="user" value="{{ request.user.id }}">
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="title" type="text" class="validate" name="title" required>
+            <label for="title">Title</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="start_date" type="text" class="validate datepicker" name="start_date" required>
+            <label for="start_date">Start Date</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="end_date" type="text" class="validate datepicker" name="end_date" required>
+            <label for="end_date">End Date</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <textarea id="description" class="materialize-textarea validate" name="description" required></textarea>
+            <label for="description">Description</label>
+          </div>
+        </div>
+       
+        <div class="row">
+          <button class="btn waves-effect waves-light" type="submit">Create Event</button>
+          <a href="{% url 'home' %}" class="waves-effect waves-light btn-flat right">Back to Home</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      // Initialize date pickers
+      $('.datepicker').datepicker({
+        dateFormat: 'yy-mm-dd',  // Set the desired date format
+        showAnim: 'slideDown',   // You can customize the animation
+        changeMonth: true,
+        changeYear: true
+      });
+
+      // Initialize materialize select dropdown
+      $('select').formSelect();
+    });
+  </script>
+{% endblock %}

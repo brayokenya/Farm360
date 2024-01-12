@@ -29,18 +29,18 @@
               </div>
             </div>
 
-            <!-- Display user's collections with Actions section -->
+            <!-- Display user's events with Actions section -->
             <div class="card">
               <div class="card-content">
-                <span class="card-title">Your Collections</span>
-                <p>Number of collections: {{ collection_list|length }}</p>
-                <ul class="collection">
-                  {% for collection in collection_list %}
-                    <li class="collection-item">
+                <span class="card-title">Your Events</span>
+                <p>Number of events: {{ event_list|length }}</p>
+                <ul class="event">
+                  {% for event in event_list %}
+                    <li class="event-item">
                       <div class="row valign-wrapper">
                         <div class="col s8">
-                          <a href="{% url 'collection_details' collection.id %}">
-                            {{ collection.title }} - {{ collection.disease_term }}
+                          <a href="{% url 'event_details' event.id %}">
+                            {{ event.title }} - {{ event.start_date }}
                           </a>
                         </div>
                         
@@ -49,11 +49,11 @@
                           <div class="row">
                             <div class="col s6">
                               <!-- Update button -->
-                              <a href="{% url 'update_collection' collection.id %}" class="waves-effect waves-light btn orange">Update</a>
+                              <a href="{% url 'update_event' event.id %}" class="waves-effect waves-light btn orange">Update</a>
                             </div>
                             <div class="col s6">
                               <!-- Delete button -->
-                              <a href="{% url 'collection_delete' collection.id %}" class="waves-effect waves-light btn red">Delete</a>
+                              <a href="{% url 'event_delete' event.id %}" class="waves-effect waves-light btn red">Delete</a>
                             </div>
                           </div>
                         </div>
@@ -64,11 +64,54 @@
               </div>
             </div>
 
-            <!-- Button to create a new collection -->
+            <!-- Button to create a new event -->
             <div class="card">
               <div class="card-content">
-                <span class="card-title">Create a New Collection</span>
-                <a href="{% url 'create_collection' %}" class="waves-effect waves-light btn">Create Collection</a>
+                <span class="card-title">Create an Event</span>
+                <a href="{% url 'create_event' %}" class="waves-effect waves-light btn">Create event</a>
+              </div>
+            </div>
+
+            <!-- Display user's livestock with Actions section -->
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Your Livestock</span>
+                <p>Number of livestock: {{ livestock_list|length }}</p>
+                <ul class="livestock">
+                  {% for livestock in livestock_list %}
+                    <li class="livestock-item">
+                      <div class="row valign-wrapper">
+                        <div class="col s8">
+                          <a href="{% url 'livestock_detail' livestock.id %}">
+                            {{ livestock.name }} - {{ livestock.livestock_type }}
+                          </a>
+                        </div>
+                        
+                        <div class="col s4 right-align">
+                          <!-- Actions section -->
+                          <div class="row">
+                            <div class="col s6">
+                              <!-- Update button -->
+                              <a href="{% url 'update_livestock' livestock.id %}" class="waves-effect waves-light btn orange">Update</a>
+                            </div>
+                            <div class="col s6">
+                              <!-- Delete button -->
+                              <a href="{% url 'livestock_delete' livestock.id %}" class="waves-effect waves-light btn red">Delete</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+
+            <!-- Button to create a new livestock -->
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Create Livestock</span>
+                <a href="{% url 'create_livestock' %}" class="waves-effect waves-light btn">Create livestock</a>
               </div>
             </div>
 

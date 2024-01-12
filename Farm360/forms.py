@@ -1,10 +1,10 @@
 # forms.py
 
 from django import forms
-from .models import Sample
+from .models import Event
 
-class SampleForm(forms.ModelForm):
+class EventForm(forms.ModelForm):
     class Meta:
-        model = Sample
-        fields = ['donor_count', 'material_type']
+        model = Event
+        fields = ("title", "start_date", "end_date", "description")
 

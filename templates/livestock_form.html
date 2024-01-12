@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Livestock | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Create Livestock</h2>
+    <div class="row">
+      <form class="col s12" method="post" action="{% url 'create_livestock' %}">
+        {% csrf_token %}
+        <input type="hidden" name="user" value="{{ request.user.id }}">
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="livestock_type" type="text" class="validate" name="livestock_type" required>
+            <label for="livestock_type">Livestock Type</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="name" type="text" class="validate" name="name" required>
+            <label for="name">Name</label>
+          </div>
+        </div>
+
+       
+        <div class="row">
+        <div class="col-md-6">
+        <label for="sex" class="form-label">Sex</label>
+        <select class="form-select" id="sex" name="sex" required>
+            <option value="" disabled selected>Select Sex</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        </div>
+        </div>
+
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="identification_number" type="text" class="validate" name="identification_number" required>
+            <label for="identification_number">Identification Number</label>
+          </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+              <label for="status" class="form-label">Status</label>
+              <select class="form-select" id="status" name="status" required>
+                <option value="" disabled selected>Select Status</option>
+                <option value="alive">Alive</option>
+                <option value="sold">Sold</option>
+                <option value="slaughtered">Slaughtered</option>
+              </select>
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <textarea id="physical_characteristics" class="materialize-textarea validate" name="physical_characteristics" required></textarea>
+            <label for="physical_characteristics">Physical Characteristics</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="birth_date" type="text" class="validate datepicker" name="birth_date" required>
+            <label for="birth_date">Birth Date</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <textarea id="vet_contacts" class="materialize-textarea validate" name="vet_contacts" required></textarea>
+            <label for="vet_contacts">Vet Contacts</label>
+          </div>
+        </div>
+       
+        <div class="row">
+          <button class="btn waves-effect waves-light" type="submit">Create Livestock</button>
+          <a href="{% url 'livestock_list' %}" class="waves-effect waves-light btn-flat right">Back to Livestock List</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      // Initialize date picker
+      $('.datepicker').datepicker({
+        dateFormat: 'yy-mm-dd',  // Set the desired date format
+        showAnim: 'slideDown',   // You can customize the animation
+        changeMonth: true,
+        changeYear: true
+      });
+
+      // Initialize materialize select dropdown
+      $('select').formSelect();
+    });
+  </script>
+{% endblock %}

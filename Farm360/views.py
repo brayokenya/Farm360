@@ -14,8 +14,7 @@ from django.views.generic import (
     DeleteView, 
     UpdateView
 )
-from .models import Collection, Sample
-from .forms import SampleForm
+from .models import Event, Livestock
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils import timezone
@@ -45,6 +44,7 @@ class SignUpView(generic.CreateView):
     template_name = "registration/signup.html"
 
 
+
 @method_decorator(login_required, name="dispatch")
 class ProfileView(View):
     """
@@ -69,31 +69,76 @@ class ProfileView(View):
             HttpResponse: Rendered user profile page.
         """
         return render(request, self.template_name)
+    
 
-
-
-
-class CollectionListView(LoginRequiredMixin, ListView):
+class EventCreateView(LoginRequiredMixin, CreateView):
     """
-    View for displaying a list of collections.
+    View for creating a new Event.
 
     Attributes:
-        model (class): Django model class for Collection.
-        template_name (str): HTML template for the list of collections.
+        model (class): Django model class for Event.
+        template_name (str): HTML template for the Event creation form.
+        fields (list): List of fields to include in the form.
     """
 
-    model = Collection
+    model = Event
+    template_name = "event_form.html"
+    fields = "__all__"
+
+    def form_valid(self, form):
+        """
+        Validate the Event creation form.
+
+        Args:
+            form (Form): Django form instance.
+
+        Returns:
+            HttpResponse: Form validation result.
+        """
+        form.instance.user = self.request.user
+        print(f"User: {self.request.user}")
+        print(f"Form data: {form.cleaned_data}")
+        result = super().form_valid(form)
+        messages.success(self.request, 'Event created successfully.')
+        return result
+    
+    def form_invalid(self, form):
+        print(f"Form errors: {form.errors}")
+        return super().form_invalid(form)
+    
+
+    def get_success_url(self):
+        """
+        Get the URL to redirect after successful Event creation.
+
+        Returns:
+            str: URL for redirection.
+        """
+        return reverse_lazy("home")
+
+
+
+class EventListView(LoginRequiredMixin, ListView):
+    """
+    View for displaying a list of Events.
+
+    Attributes:
+        model (class): Django model class for Event.
+        template_name (str): HTML template for the list of Events.
+    """
+
+    model = Event
     template_name = "home.html"
 
     def get_queryset(self):
         """
-        Get the queryset for the list of collections.
+        Get the queryset for the list of Events.
 
         Returns:
-            QuerySet: List of Collection objects.
+            QuerySet: List of Event objects.
         """
-        collections = Collection.objects.all()
-        return collections
+        events = Event.objects.all()
+        return events
 
     def get_context_data(self, **kwargs):
         """
@@ -111,24 +156,23 @@ class CollectionListView(LoginRequiredMixin, ListView):
         return context
 
 
-
-class CollectionDetailView(DetailView):
+class EventDetailView(DetailView):
     """
-    View for displaying details of a collection.
+    View for displaying details of a Event.
 
     Attributes:
-        model (class): Django model class for Collection.
-        template_name (str): HTML template for the collection details.
-        context_object_name (str): Name of the context variable for the collection object.
+        model (class): Django model class for Event.
+        template_name (str): HTML template for the Event details.
+        context_object_name (str): Name of the context variable for the Event object.
     """
 
-    model = Collection
-    template_name = "collection_details.html"
-    context_object_name = "collection"
+    model = Event
+    template_name = "event_details.html"
+    context_object_name = "event"
 
     def get_context_data(self, **kwargs):
         """
-        Get additional context data for the collection details view.
+        Get additional context data for the Event details view.
 
         Args:
             **kwargs: Arbitrarily named arguments.
@@ -137,174 +181,51 @@ class CollectionDetailView(DetailView):
             dict: Additional context data.
         """
         context = super().get_context_data(**kwargs)
-        context["samples"] = Sample.objects.filter(collection=self.object)
+        # context["samples"] = Sample.objects.filter(Event=self.object)
         return context
 
 
-class SampleCreateView(LoginRequiredMixin, CreateView):
+class EventDeleteView(LoginRequiredMixin, DeleteView):
     """
-    View for creating a new sample.
+    View for deleting a Event.
 
     Attributes:
-        model (class): Django model class for Sample.
-        template_name (str): HTML template for the sample creation form.
-        form_class (class): Django form class for the sample creation.
-    """
-
-    model = Sample
-    template_name = "sample_form.html"
-    form_class = SampleForm
-
-    def form_valid(self, form):
-        """
-        Validate the sample creation form.
-
-        Args:
-            form (Form): Django form instance.
-
-        Returns:
-            HttpResponse: Form validation result.
-        """
-        form.instance.user = self.request.user
-        form.instance.collection = Collection.objects.get(
-            pk=self.kwargs["collection_id"]
-        )
-        messages.success(self.request, 'Sample created successfully.')
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        """
-        Get the URL to redirect after successful sample creation.
-
-        Returns:
-            str: URL for redirection.
-        """
-        return reverse_lazy(
-            "collection_details", kwargs={"pk": self.kwargs["collection_id"]}
-        )
-
-
-class CollectionCreateView(LoginRequiredMixin, CreateView):
-    """
-    View for creating a new collection.
-
-    Attributes:
-        model (class): Django model class for Collection.
-        template_name (str): HTML template for the collection creation form.
-        fields (list): List of fields to include in the form.
-    """
-
-    model = Collection
-    template_name = "collection_form.html"
-    fields = ["disease_term", "title"]
-
-    def form_valid(self, form):
-        """
-        Validate the collection creation form.
-
-        Args:
-            form (Form): Django form instance.
-
-        Returns:
-            HttpResponse: Form validation result.
-        """
-        form.instance.user = self.request.user
-        messages.success(self.request, 'Collection created successfully.')
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        """
-        Get the URL to redirect after successful collection creation.
-
-        Returns:
-            str: URL for redirection.
-        """
-        return reverse_lazy("home")
-
-
-class CollectionDeleteView(LoginRequiredMixin, DeleteView):
-    """
-    View for deleting a collection.
-
-    Attributes:
-        model (class): Django model class for Collection.
+        model (class): Django model class for Event.
         template_name (str): HTML template for the confirmation page.
     """
 
-    model = Collection
+    model = Event
     template_name = "confirm_delete.html"  # Create a confirmation template
 
     def get_success_url(self):
         """
-        Get the URL to redirect after successful collection deletion.
+        Get the URL to redirect after successful Event deletion.
 
         Returns:
             str: URL for redirection.
         """
-        messages.success(self.request, 'Collection deleted successfully.')
+        messages.success(self.request, 'Event deleted successfully.')
         return reverse_lazy("home")
 
 
-class SampleDeleteView(LoginRequiredMixin, DeleteView):
+
+class EventUpdateView(LoginRequiredMixin, UpdateView):
     """
-    View for deleting a sample.
+    View for updating a Event.
 
     Attributes:
-        model (class): Django model class for Sample.
-        template_name (str): HTML template for the confirmation page.
-    """
-
-    model = Sample
-    template_name = "confirm_delete.html"  # Create a confirmation template
-
-    def get_success_url(self):
-        """
-        Get the URL to redirect after successful sample deletion.
-
-        Returns:
-            str: URL for redirection.
-        """
-        messages.success(self.request, 'Sample deleted successfully.')
-        return reverse_lazy(
-            "collection_details", kwargs={"pk": self.object.collection.id}
-        )
-
-    def delete(self, request, *args, **kwargs):
-        """
-        Handle the DELETE request and perform the sample deletion.
-
-        Args:
-            request (HttpRequest): Django HttpRequest object.
-            *args: Variable length argument list.
-            **kwargs: Arbitrarily named arguments.
-
-        Returns:
-            HttpResponse: Redirection after successful deletion.
-        """
-        self.object = self.get_object()
-        collection_id = self.object.collection.id
-        success_url = self.get_success_url()
-        self.object.delete()
-        return HttpResponseRedirect(success_url)
-
-
-class CollectionUpdateView(LoginRequiredMixin, UpdateView):
-    """
-    View for updating a collection.
-
-    Attributes:
-        model (class): Django model class for Collection.
-        template_name (str): HTML template for the collection update form.
+        model (class): Django model class for Event.
+        template_name (str): HTML template for the Event update form.
         fields (list): List of fields to include in the form.
     """
 
-    model = Collection
-    template_name = "update_collection.html"
+    model = Event
+    template_name = "update_Event.html"
     fields = ["disease_term", "title"]
 
     def form_valid(self, form):
         """
-        Validate the collection update form.
+        Validate the Event update form.
 
         Args:
             form (Form): Django form instance.
@@ -312,12 +233,12 @@ class CollectionUpdateView(LoginRequiredMixin, UpdateView):
         Returns:
             HttpResponse: Form validation result.
         """
-        messages.success(self.request, 'Collection updated successfully.')
+        messages.success(self.request, 'Event updated successfully.')
         return super().form_valid(form)
 
     def get_success_url(self):
         """
-        Get the URL to redirect after successful collection update.
+        Get the URL to redirect after successful Event update.
 
         Returns:
             str: URL for redirection.
@@ -325,40 +246,31 @@ class CollectionUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy("home")
 
 
-class SampleUpdateView(LoginRequiredMixin, UpdateView):
-    """
-    View for updating a sample.
-
-    Attributes:
-        model (class): Django model class for Sample.
-        template_name (str): HTML template for the sample update form.
-        form_class (class): Django form class for the sample update.
-    """
-
-    model = Sample
-    template_name = "update_sample.html"
-    form_class = SampleForm
+#### Livestock Views
+    
+class LivestockCreateView(LoginRequiredMixin, CreateView):
+    model = Livestock
+    template_name = "livestock_form.html"
+    fields = "__all__"
 
     def form_valid(self, form):
-        """
-        Validate the sample update form.
-
-        Args:
-            form (Form): Django form instance.
-
-        Returns:
-            HttpResponse: Form validation result.
-        """
-        messages.success(self.request, 'Sample updated successfully.')
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self):
-        """
-        Get the URL to redirect after successful sample update.
+        return reverse_lazy("livestock_list")
+    
+class LivestockListView(LoginRequiredMixin, ListView):
+    model = Livestock
+    template_name = 'livestock_list.html'  
+    context_object_name = 'livestock_list'
 
-        Returns:
-            str: URL for redirection.
-        """
-        return reverse_lazy(
-            "collection_details", kwargs={"pk": self.object.collection.id}
-        )
+    def get_queryset(self):
+        # Filter the queryset based on the logged-in user
+        return Livestock.objects.filter(user=self.request.user).order_by('-id')
+    
+
+class LivestockDetailView(DetailView):
+    model = Livestock
+    template_name = 'livestock_detail.html'
+    context_object_name = 'livestock'
