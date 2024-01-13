@@ -153,6 +153,7 @@ class EventListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         current_hour = timezone.localtime(timezone.now()).hour
         context['current_hour'] = current_hour
+        context['livestock_list'] = Livestock.objects.filter(user=self.request.user).order_by('-id')
         return context
 
 
@@ -274,3 +275,5 @@ class LivestockDetailView(DetailView):
     model = Livestock
     template_name = 'livestock_detail.html'
     context_object_name = 'livestock'
+
+    
