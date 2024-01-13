@@ -3,114 +3,99 @@
 {% block title %}Home | Farm 360{% endblock %}
 
 {% block content %}
-  <!-- Content wrapper -->
-  <div class="content-wrapper">
-    <!-- Content -->
-    <div class="container-xxl flex-grow-1 container-p-y">
-      <div class="row">
-        <div class="col s12 m6">
-          {% if user.is_authenticated %}
-            <div class="card blue-grey darken-1 white-text">
-              <div class="card-content">
-                <span class="card-title">
-                  {% comment %} Greeting based on the time of day {% endcomment %}
-                  {% if current_hour < 12 %}
-                    Good Morning,
-                  {% elif current_hour < 18 %}
-                    Good Afternoon,
-                  {% else %}
-                    Good Evening,
-                  {% endif %}
-                  {{ user.username }}!
-                </span>
-                <p>Welcome Back!.</p>
-              </div>
-            </div>
-
-            <!-- Display user's events with Actions section -->
-            <div class="card">
-              <div class="card-content">
-                <span class="card-title">Your Events</span>
-                <p>Number of events: {{ event_list|length }}</p>
-                <ul class="event">
-                  {% for event in event_list %}
-                    <li class="event-item">
-                      <div class="row valign-wrapper">
-                        <div class="col s8">
-                          <a href="{% url 'event_details' event.id %}">
-                            {{ event.title }} - {{ event.start_date }}
-                          </a>
-                        </div>
-                        
-                        <div class="col s4 right-align">
-                          <!-- Actions section -->
-                          <div class="row">
-                            <div class="col s6">
-                              <!-- Update button -->
-                              <a href="{% url 'update_event' event.id %}" class="waves-effect waves-light btn orange">Update</a>
-                            </div>
-                            <div class="col s6">
-                              <!-- Delete button -->
-                              <a href="{% url 'event_delete' event.id %}" class="waves-effect waves-light btn red">Delete</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-
+<!-- Content wrapper -->
+<div class="content-wrapper">
+  <!-- Content -->
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+      <!-- Sidebar with create buttons -->
+      <div class="col-lg-3">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Actions</span>
             <!-- Button to create a new event -->
-            <div class="card">
-              <div class="card-content">
-                <span class="card-title">Create an Event</span>
-                <a href="{% url 'create_event' %}" class="waves-effect waves-light btn">Create event</a>
-              </div>
-            </div>
-
-            <!-- Display user's livestock with Actions section -->
-            <div class="card">
-              <div class="card-content">
-                <span class="card-title">Your Livestock</span>
-                <p>Number of livestock: {{ livestock_list|length }}</p>
-                <ul class="collection">
-                  {% for livestock in livestock_list %}
-                    <li class="collection-item">
-                      <strong>{{ livestock.name }}</strong> - {{ livestock.livestock_type }} ({{ livestock.sex }})
-                      <br>
-                      Status: {{ livestock.status }}
-                      <br>
-                      ID: {{ livestock.identification_number }}
-                      <br>
-                      <a href="{% url 'livestock_detail' livestock.id %}">Details</a>
-                    </li>
-                  {% empty %}
-                    <li class="collection-item">No livestock records found.</li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-
+            <a href="{% url 'create_event' %}" class="waves-effect waves-light btn mb-3">Create Event</a>
             <!-- Button to create a new livestock -->
-            <div class="card">
-              <div class="card-content">
-                <span class="card-title">Create Livestock</span>
-                <a href="{% url 'create_livestock' %}" class="waves-effect waves-light btn">Create livestock</a>
+            <a href="{% url 'create_livestock' %}" class="waves-effect waves-light btn">Create Livestock</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Salutation outside main content div -->
+      <div class="col-lg-9">
+        {% if user.is_authenticated %}
+          <!-- Salutation Card -->
+          <div class="card blue-grey darken-1 white-text" style="max-height: 200px; overflow: auto;">
+            <div class="card-content">
+              <span class="card-title">
+                {% comment %} Greeting based on the time of day {% endcomment %}
+                {% if current_hour < 12 %}
+                  Good Morning,
+                {% elif current_hour < 18 %}
+                  Good Afternoon,
+                {% else %}
+                  Good Evening,
+                {% endif %}
+                {{ user.username }}!
+              </span>
+              <p>Welcome Back!.</p>
+            </div>
+          </div>
+
+          <!-- Section for Events and Livestock (side by side) -->
+          <div class="row">
+            <!-- Section for Events -->
+            <div class="col-lg-6">
+              <div class="card" style="max-height: 200px; overflow: auto;">
+                <div class="card-content">
+                  <span class="card-title">Your Events</span>
+                  <p>Number of events: {{ event_list|length }}</p>
+                  <ul class="event">
+                    {% for event in event_list|slice:":2" %}
+                      <li>{{ event.title }} - {{ event.start_date }}</li>
+                    {% endfor %}
+                  </ul>
+                  <a href="">See More</a>
+                </div>
               </div>
             </div>
 
-          {% else %}
-            <div class="card">
-              <div class="card-content">
-                <p>You are not logged in.</p>
-                <a href="{% url 'login' %}" class="waves-effect waves-light btn">Log In</a>
+            <!-- Section for Livestock -->
+            <div class="col-lg-6">
+              <div class="card" style="max-height: 200px; overflow: auto;">
+                <div class="card-content">
+                  <span class="card-title">Your Livestock</span>
+                  <p>Number of livestock: {{ livestock_list|length }}</p>
+                  <ul class="collection">
+                    {% for livestock in livestock_list|slice:":2" %}
+                      <li>
+                        <strong>{{ livestock.name }}</strong> - {{ livestock.livestock_type }} ({{ livestock.sex }})
+                        <br>
+                        Status: {{ livestock.status }}
+                        <br>
+                        ID: {{ livestock.identification_number }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <a href="{% url 'livestock_list' %}">See More</a>
+                </div>
               </div>
             </div>
-          {% endif %}
-        </div>
+          </div>
+        {% else %}
+          <div class="card" style="max-height: 200px; overflow: auto;">
+            <div class="card-content">
+              <p>You are not logged in.</p>
+              <a href="{% url 'login' %}" class="waves-effect waves-light btn">Log In</a>
+            </div>
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>
+</div>
+
+
+
+
 {% endblock %}
