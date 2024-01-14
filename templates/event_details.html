@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Event Details | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">{{ event.title }}</h2>
+    <p><strong>Start Date:</strong> {{ event.start_date }}</p>
+    <p><strong>Description:</strong> {{ event.description }}</p>
+    <p><strong>Location:</strong> {{ event.location }}</p>
+
+    <!-- You can add more details based on your Event model -->
+
+    <a href="{% url 'update_event' pk=event.id %}" class="btn btn-primary">Edit Event</a>
+    <a href="{% url 'event_delete' pk=event.id %}" class="btn btn-danger">Delete Event</a>
+
+    <a href="{% url 'home' %}" class="waves-effect waves-light btn">Back Home</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+<!-- event_list.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Event List | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Event List</h2>
+    <ul class="collection">
+        <p>Number of events: {{ event_list|length }}</p>
+      {% for event in event_list %}
+        <li class="collection-item">
+          <strong>{{ event.title }}</strong>
+          <br>
+          Start Date: {{ event.start_date }}
+          <br>
+          Location: {{ event.location }}
+          <br>
+          <a href="{% url 'event_details' pk=event.id %}">Details</a>
+        </li>
+      {% empty %}
+        <li class="collection-item">No events found.</li>
+      {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}" class="waves-effect waves-light btn">Back Home</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Event | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Update Event</h2>
+    <form method="post" action="{% url 'update_event' pk=event.id %}">
+      {% csrf_token %}
+      
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="id_title" class="form-label">Title:</label>
+        <input type="text" name="title" id="id_title" class="form-control" value="{{ event.title }}">
+      </div>
+
+      <!-- Start Date -->
+      <div class="mb-3">
+        <label for="id_start_date" class="form-label">Start Date:</label>
+        <input type="datetime-local" name="start_date" id="id_start_date" class="form-control" value="{{ event.start_date|date:'Y-m-d\TH:i' }}">
+      </div>
+
+      <!-- End Date -->
+      <div class="mb-3">
+        <label for="id_end_date" class="form-label">End Date:</label>
+        <input type="datetime-local" name="end_date" id="id_end_date" class="form-control" value="{{ event.end_date|date:'Y-m-d\TH:i' }}">
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="id_description" class="form-label">Description:</label>
+        <textarea name="description" id="id_description" class="form-control">{{ event.description }}</textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Update Event</button>
+    </form>
+    <a href="{% url 'event_details' pk=event.id %}" class="btn btn-secondary">Cancel</a>
+  </div>
+{% endblock %}

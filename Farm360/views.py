@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.utils import timezone
+from datetime import datetime
 from django.views.generic import (
     ListView, 
     DetailView, 
@@ -15,20 +18,69 @@ from django.views.generic import (
     UpdateView
 )
 from .models import Event, Livestock
-from django.http import HttpResponseRedirect
-from django.contrib import messages
-from django.utils import timezone
-from datetime import datetime
+
 
 
 class IndexView(View):
-    
+    """
+    View for the homepage.
+
+    Attributes:
+        template_name (str): HTML template for the homepage.
+    """
+
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
+        """
+        Handle GET requests for the homepage.
+
+        Args:
+            request (HttpRequest): Django HttpRequest object.
+            *args: Variable length argument list.
+            **kwargs: Arbitrarily named arguments.
+
+        Returns:
+            HttpResponse: Rendered homepage.
+        """
         return render(request, self.template_name)
-    
-    
+
+
+class DashboardView(LoginRequiredMixin, View):
+    """
+    View for the user dashboard.
+
+    Attributes:
+        template_name (str): HTML template for the user dashboard.
+    """
+
+    template_name = "dashboard.html"
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handle GET requests for the user dashboard.
+
+        Args:
+            request (HttpRequest): Django HttpRequest object.
+            *args: Variable length argument list.
+            **kwargs: Arbitrarily named arguments.
+
+        Returns:
+            HttpResponse: Rendered user dashboard.
+        """
+        events = Event.objects.filter(user=request.user).order_by('-id')
+        livestock = Livestock.objects.filter(user=request.user).order_by('-id')
+        current_hour = timezone.localtime(timezone.now()).hour
+
+        context = {
+            'current_hour': current_hour,
+            'event_list': events,
+            'livestock_list': livestock,
+        }
+
+        return render(request, self.template_name, context)
+
+
 class SignUpView(generic.CreateView):
     """
     View for user registration.
@@ -42,7 +94,6 @@ class SignUpView(generic.CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
-
 
 
 @method_decorator(login_required, name="dispatch")
@@ -69,7 +120,7 @@ class ProfileView(View):
             HttpResponse: Rendered user profile page.
         """
         return render(request, self.template_name)
-    
+
 
 class EventCreateView(LoginRequiredMixin, CreateView):
     """
@@ -96,16 +147,21 @@ class EventCreateView(LoginRequiredMixin, CreateView):
             HttpResponse: Form validation result.
         """
         form.instance.user = self.request.user
-        print(f"User: {self.request.user}")
-        print(f"Form data: {form.cleaned_data}")
         result = super().form_valid(form)
         messages.success(self.request, 'Event created successfully.')
         return result
     
     def form_invalid(self, form):
-        print(f"Form errors: {form.errors}")
+        """
+        Handle cases where the Event creation form is invalid.
+
+        Args:
+            form (Form): Django form instance.
+
+        Returns:
+            HttpResponse: Form validation result.
+        """
         return super().form_invalid(form)
-    
 
     def get_success_url(self):
         """
@@ -115,7 +171,6 @@ class EventCreateView(LoginRequiredMixin, CreateView):
             str: URL for redirection.
         """
         return reverse_lazy("home")
-
 
 
 class EventListView(LoginRequiredMixin, ListView):
@@ -128,7 +183,10 @@ class EventListView(LoginRequiredMixin, ListView):
     """
 
     model = Event
-    template_name = "home.html"
+    template_name = "event_list.html"
+    context_object_name = 'event_list'
+    
+
 
     def get_queryset(self):
         """
@@ -137,24 +195,8 @@ class EventListView(LoginRequiredMixin, ListView):
         Returns:
             QuerySet: List of Event objects.
         """
-        events = Event.objects.all()
-        return events
-
-    def get_context_data(self, **kwargs):
-        """
-        Get additional context data for the template.
-
-        Args:
-            **kwargs: Arbitrarily named arguments.
-
-        Returns:
-            dict: Additional context data.
-        """
-        context = super().get_context_data(**kwargs)
-        current_hour = timezone.localtime(timezone.now()).hour
-        context['current_hour'] = current_hour
-        context['livestock_list'] = Livestock.objects.filter(user=self.request.user).order_by('-id')
-        return context
+        return Event.objects.filter(user=self.request.user).order_by('-id')
+   
 
 
 class EventDetailView(DetailView):
@@ -182,7 +224,7 @@ class EventDetailView(DetailView):
             dict: Additional context data.
         """
         context = super().get_context_data(**kwargs)
-        # context["samples"] = Sample.objects.filter(Event=self.object)
+        context['event'] = self.object
         return context
 
 
@@ -209,7 +251,6 @@ class EventDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy("home")
 
 
-
 class EventUpdateView(LoginRequiredMixin, UpdateView):
     """
     View for updating a Event.
@@ -221,8 +262,8 @@ class EventUpdateView(LoginRequiredMixin, UpdateView):
     """
 
     model = Event
-    template_name = "update_Event.html"
-    fields = ["disease_term", "title"]
+    template_name = "update_event.html"
+    fields = "__all__"
 
     def form_valid(self, form):
         """
@@ -247,33 +288,78 @@ class EventUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy("home")
 
 
-#### Livestock Views
-    
 class LivestockCreateView(LoginRequiredMixin, CreateView):
+    """
+    View for creating a new Livestock record.
+
+    Attributes:
+        model (class): Django model class for Livestock.
+        template_name (str): HTML template for the Livestock creation form.
+        fields (list): List of fields to include in the form.
+    """
+
     model = Livestock
     template_name = "livestock_form.html"
     fields = "__all__"
 
     def form_valid(self, form):
+        """
+        Validate the Livestock creation form.
+
+        Args:
+            form (Form): Django form instance.
+
+        Returns:
+            HttpResponse: Form validation result.
+        """
         form.instance.user = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self):
+        """
+        Get the URL to redirect after successful Livestock creation.
+
+        Returns:
+            str: URL for redirection.
+        """
         return reverse_lazy("livestock_list")
-    
+
+
 class LivestockListView(LoginRequiredMixin, ListView):
+    """
+    View for displaying a list of Livestock records.
+
+    Attributes:
+        model (class): Django model class for Livestock.
+        template_name (str): HTML template for the list of Livestock records.
+        context_object_name (str): Name of the context variable for the Livestock list.
+    """
+
     model = Livestock
     template_name = 'livestock_list.html'  
     context_object_name = 'livestock_list'
 
     def get_queryset(self):
+        """
+        Get the queryset for the list of Livestock records.
+
+        Returns:
+            QuerySet: List of Livestock objects.
+        """
         # Filter the queryset based on the logged-in user
         return Livestock.objects.filter(user=self.request.user).order_by('-id')
-    
+
 
 class LivestockDetailView(DetailView):
+    """
+    View for displaying details of a Livestock record.
+
+    Attributes:
+        model (class): Django model class for Livestock.
+        template_name (str): HTML template for the Livestock details.
+        context_object_name (str): Name of the context variable for the Livestock object.
+    """
+
     model = Livestock
     template_name = 'livestock_detail.html'
     context_object_name = 'livestock'
-
-    
