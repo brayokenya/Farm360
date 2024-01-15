@@ -1,0 +1,61 @@
+<!-- update_resource.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Update Resource | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Update Resource</h2>
+    <div class="row">
+      <form class="col s12" method="post" action="{% url 'resource_update' pk=resource.id %}">
+        {% csrf_token %}
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="name" type="text" class="validate" name="name" value="{{ resource.name }}" required>
+            <label for="name">Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="type" type="text" class="validate" name="type" value="{{ resource.type }}" required>
+            <label for="type">Type</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <textarea id="description" class="materialize-textarea validate" name="description" required>{{ resource.description }}</textarea>
+            <label for="description">Description</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="quantity" type="number" class="validate" name="quantity" value="{{ resource.quantity }}" required>
+            <label for="quantity">Quantity</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="location" type="text" class="validate" name="location" value="{{ resource.location }}" required>
+            <label for="location">Location</label>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn waves-effect waves-light" type="submit">Update Resource</button>
+          <a href="{% url 'resource_list' %}" class="waves-effect waves-light btn-flat right">Back to Resource List</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      // Initialize materialize text area
+      $('textarea').val('{{ resource.description }}');
+      M.textareaAutoResize($('#description'));
+
+      // Initialize materialize select dropdown
+      $('select').formSelect();
+    });
+  </script>
+{% endblock %}

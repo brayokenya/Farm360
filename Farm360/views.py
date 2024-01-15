@@ -266,7 +266,7 @@ class EventUpdateView(LoginRequiredMixin, UpdateView):
 
     model = Event
     template_name = "update_event.html"
-    fields = "__all__"
+    fields =  ["title", "start_date", "end_date", "description"]
 
     def form_valid(self, form):
         """
@@ -381,8 +381,8 @@ class LivestockUpdateView(LoginRequiredMixin, UpdateView):
     """
 
     model = Livestock
-    template_name = "livestock_form.html" 
-    fields = "__all__"
+    template_name = "update_livestock.html" 
+    fields =  ["livestock_type", "name", "sex", "identification_number",  "status", "physical_characteristics", "birth_date", "vet_contacts"]
 
     def form_valid(self, form):
         """
@@ -511,3 +511,64 @@ class ResourceDetailView(DetailView):
     model = Resource
     template_name = 'resource_detail.html'
     context_object_name = 'resource'
+
+
+class ResourceUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    View for updating a Resource record.
+
+    Attributes:
+        model (class): Django model class for Resource.
+        template_name (str): HTML template for the Resource update form.
+        fields (list): List of fields to include in the form.
+    """
+
+    model = Resource
+    template_name = "update_resource.html" 
+    fields =  ["name", "type", "description", "quantity",  "location"]
+
+    def form_valid(self, form):
+        """
+        Validate the Resource update form.
+
+        Args:
+            form (Form): Django form instance.
+
+        Returns:
+            HttpResponse: Form validation result.
+        """
+        messages.success(self.request, 'Resource updated successfully.')
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        """
+        Get the URL to redirect after successful Resource update.
+
+        Returns:
+            str: URL for redirection.
+        """
+        return reverse_lazy("resource_detail", kwargs={"pk": self.object.pk})
+    
+
+class ResourceDeleteView(LoginRequiredMixin, DeleteView):
+    """
+    View for deleting a Event.
+
+    Attributes:
+        model (class): Django model class for Event.
+        template_name (str): HTML template for the confirmation page.
+    """
+
+    model = Resource
+    template_name = "confirm_delete.html"  # Create a confirmation template
+
+    def get_success_url(self):
+        """
+        Get the URL to redirect after successful Event deletion.
+
+        Returns:
+            str: URL for redirection.
+        """
+        messages.success(self.request, 'Resource deleted successfully.')
+        return reverse_lazy("home")
+
