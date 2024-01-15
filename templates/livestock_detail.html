@@ -24,6 +24,20 @@
         <strong>ID:</strong> {{ livestock.identification_number }}
       </li>
     </ul>
+
+    <!-- Add edit and delete buttons -->
+    <div class="row">
+      <div class="col s6">
+        <a href="{% url 'livestock_edit' pk=livestock.id %}" class="waves-effect waves-light btn">Edit Livestock</a>
+      </div>
+      <div class="col s6">
+        <form action="{% url 'livestock_delete' pk=livestock.id %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="waves-effect waves-light btn red darken-3">Delete Livestock</button>
+        </form>
+      </div>
+    </div>
+
     <a href="{% url 'livestock_list' %}" class="waves-effect waves-light btn">Back to Livestock List</a>
   </div>
 {% endblock %}

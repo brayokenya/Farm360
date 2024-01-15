@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     SignUpView, ProfileView, EventListView, EventCreateView, EventDeleteView, 
     EventUpdateView, IndexView, EventDetailView, LivestockCreateView, 
-    LivestockListView, LivestockDetailView, DashboardView
+    LivestockListView, LivestockDetailView, DashboardView, LivestockUpdateView, LivestockDeleteView
 )
 
 urlpatterns = [
@@ -20,4 +20,8 @@ urlpatterns = [
     path('create_livestock/', LivestockCreateView.as_view(), name='create_livestock'),
     path('livestock_list/', LivestockListView.as_view(), name='livestock_list'),
     path('livestock_detail/<int:pk>/', LivestockDetailView.as_view(), name='livestock_detail'),
+    path('livestock/<int:pk>/edit/', LivestockUpdateView.as_view(), name='livestock_edit'),
+    path('livestock/<int:pk>/delete/', LivestockDeleteView.as_view(), name='livestock_delete'),
 ]
+
+

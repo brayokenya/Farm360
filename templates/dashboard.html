@@ -9,17 +9,36 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row">
       <!-- Sidebar with create buttons -->
-      <div class="col-lg-3">
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">Actions</span>
-            <!-- Button to create a new event -->
-            <a href="{% url 'create_event' %}" class="waves-effect waves-light btn mb-3">Create Event</a>
-            <!-- Button to create a new livestock -->
-            <a href="{% url 'create_livestock' %}" class="waves-effect waves-light btn">Create Livestock</a>
+          <div class="col-lg-3">
+            <div class="card side-nav-card">
+              <div class="card-content">
+                <span class="card-title">Actions</span><br>
+                <!-- Dropdown for Create Event -->
+                <div class="dropdown">
+                  <a class="dropdown-toggle" href="#" role="button" id="createEventDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-plus-circle"></i> Schedule
+                  </a><br><br>
+                  <ul class="dropdown-menu" aria-labelledby="createEventDropdown">
+                    <li><a class="dropdown-item" href="{% url 'create_event' %}">Create Event</a></li><br>
+                    <li><a class="dropdown-item" href="{% url 'event_list' %}">List Events</a></li>
+                    <!-- Add more dropdown items as needed -->
+                  </ul>
+                </div><br>
+                <!-- Dropdown for Create Livestock -->
+                <div class="dropdown">
+                  <a class="dropdown-toggle" href="#" role="button" id="createLivestockDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-plus-circle"></i> Livestock
+                  </a><br>
+                  <ul class="dropdown-menu" aria-labelledby="createLivestockDropdown">
+                    <li><a class="dropdown-item" href="{% url 'create_livestock' %}">Add Animals</a></li><br>
+                    <li><a class="dropdown-item" href="{% url 'livestock_list' %}">List Animals</a></li>
+                    <!-- Add more dropdown items as needed -->
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+
 
       <!-- Salutation outside main content div -->
       <div class="col-lg-9">
@@ -45,46 +64,46 @@
           <!-- Section for Events and Livestock (side by side) -->
           <div class="row">
             <!-- Section for Events -->
-<div class="col-lg-6">
-    <div class="card" style="max-height: 200px; overflow: auto;">
-      <div class="card-content">
-        <span class="card-title">Your Events</span>
-        <p>Number of events: {{ event_list|length }}</p>
-        <ul class="event">
-          {% for event in event_list|slice:":2" %}
-            <li>
-              <a href="{% url 'event_details' pk=event.pk %}">{{ event.title }}</a>
-              <p>Start date: {{ event.start_date }}</p>
-              <p>End date: {{ event.end_date }}</p>
-            </li>
-          {% endfor %}
-        </ul>
-        <a href="{% url 'event_list' %}">See More</a>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Section for Livestock -->
-  <div class="col-lg-6">
-    <div class="card" style="max-height: 200px; overflow: auto;">
-      <div class="card-content">
-        <span class="card-title">Your Livestock</span>
-        <p>Number of livestock: {{ livestock_list|length }}</p>
-        <ul class="collection">
-          {% for livestock in livestock_list|slice:":2" %}
-            <li>
-              <a href="{% url 'livestock_detail' pk=livestock.pk %}">
-                <strong>Name: {{ livestock.name }}</strong> - Type:{{ livestock.livestock_type }} ({{ livestock.sex }})
-              </a>
-              <br>
-            </li>
-          {% endfor %}
-        </ul>
-        <a href="{% url 'livestock_list' %}">See More</a>
-      </div>
-    </div>
-  </div>
-  
+            <div class="col-lg-6">
+              <div class="card" style="max-height: 200px; overflow: auto;">
+                <div class="card-content">
+                  <span class="card-title">Your Events</span>
+                  <p>Number of events: {{ event_list|length }}</p>
+                  <ul class="event">
+                    {% for event in event_list|slice:":2" %}
+                      <li>
+                        <a href="{% url 'event_details' pk=event.pk %}">{{ event.title }}</a>
+                        <p>Start date: {{ event.start_date }}</p>
+                        <p>End date: {{ event.end_date }}</p>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <a href="{% url 'event_list' %}">See More</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section for Livestock -->
+            <div class="col-lg-6">
+              <div class="card" style="max-height: 200px; overflow: auto;">
+                <div class="card-content">
+                  <span class="card-title">Your Livestock</span>
+                  <p>Number of livestock: {{ livestock_list|length }}</p>
+                  <ul class="collection">
+                    {% for livestock in livestock_list|slice:":2" %}
+                      <li>
+                        <a href="{% url 'livestock_detail' pk=livestock.pk %}">
+                          <strong>Name: {{ livestock.name }}</strong> - Type:{{ livestock.livestock_type }} ({{ livestock.sex }})
+                        </a>
+                        <br>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <a href="{% url 'livestock_list' %}">See More</a>
+                </div>
+              </div>
+            </div>
+          </div>
         {% else %}
           <div class="card" style="max-height: 200px; overflow: auto;">
             <div class="card-content">
@@ -97,8 +116,5 @@
     </div>
   </div>
 </div>
-
-
-
 
 {% endblock %}

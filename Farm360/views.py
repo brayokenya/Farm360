@@ -363,3 +363,65 @@ class LivestockDetailView(DetailView):
     model = Livestock
     template_name = 'livestock_detail.html'
     context_object_name = 'livestock'
+
+
+
+
+class LivestockUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    View for updating a Livestock record.
+
+    Attributes:
+        model (class): Django model class for Livestock.
+        template_name (str): HTML template for the Livestock update form.
+        fields (list): List of fields to include in the form.
+    """
+
+    model = Livestock
+    template_name = "livestock_form.html" 
+    fields = "__all__"
+
+    def form_valid(self, form):
+        """
+        Validate the Livestock update form.
+
+        Args:
+            form (Form): Django form instance.
+
+        Returns:
+            HttpResponse: Form validation result.
+        """
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        """
+        Get the URL to redirect after successful Livestock update.
+
+        Returns:
+            str: URL for redirection.
+        """
+        return reverse_lazy("livestock_detail", kwargs={"pk": self.object.pk})
+
+
+
+
+class LivestockDeleteView(LoginRequiredMixin, DeleteView):
+    """
+    View for deleting a Livestock record.
+
+    Attributes:
+        model (class): Django model class for Livestock.
+        template_name (str): HTML template for the confirmation page.
+    """
+
+    model = Livestock
+    template_name = "confirm_delete.html"  
+
+    def get_success_url(self):
+        """
+        Get the URL to redirect after successful Livestock deletion.
+
+        Returns:
+            str: URL for redirection.
+        """
+        return reverse_lazy("livestock_list")
