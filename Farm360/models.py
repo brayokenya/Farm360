@@ -52,3 +52,21 @@ class Livestock(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+
+class Resource(models.Model):
+    RESOURCE_TYPES = [
+        ('equipment', 'Equipment'),
+        ('warehouse', 'Warehouse'),
+        ('inventory', 'Inventory'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    type = models.CharField(max_length=20, choices=RESOURCE_TYPES)
+    description = models.TextField(blank=True, null=True)
+    quantity = models.PositiveIntegerField(default=0)
+    location = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.name

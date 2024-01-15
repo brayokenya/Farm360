@@ -1,120 +1,152 @@
+<!-- Dashboard template with resource creation added to Actions tab -->
 {% extends 'base.html' %}
 
 {% block title %}Dashboard | Farm 360{% endblock %}
 
 {% block content %}
-<!-- Content wrapper -->
-<div class="content-wrapper">
-  <!-- Content -->
-  <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row">
-      <!-- Sidebar with create buttons -->
-          <div class="col-lg-3">
-            <div class="card side-nav-card">
-              <div class="card-content">
-                <span class="card-title">Actions</span><br>
-                <!-- Dropdown for Create Event -->
-                <div class="dropdown">
-                  <a class="dropdown-toggle" href="#" role="button" id="createEventDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-plus-circle"></i> Schedule
-                  </a><br><br>
-                  <ul class="dropdown-menu" aria-labelledby="createEventDropdown">
-                    <li><a class="dropdown-item" href="{% url 'create_event' %}">Create Event</a></li><br>
-                    <li><a class="dropdown-item" href="{% url 'event_list' %}">List Events</a></li>
-                    <!-- Add more dropdown items as needed -->
-                  </ul>
-                </div><br>
-                <!-- Dropdown for Create Livestock -->
-                <div class="dropdown">
-                  <a class="dropdown-toggle" href="#" role="button" id="createLivestockDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-plus-circle"></i> Livestock
-                  </a><br>
-                  <ul class="dropdown-menu" aria-labelledby="createLivestockDropdown">
-                    <li><a class="dropdown-item" href="{% url 'create_livestock' %}">Add Animals</a></li><br>
-                    <li><a class="dropdown-item" href="{% url 'livestock_list' %}">List Animals</a></li>
-                    <!-- Add more dropdown items as needed -->
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-      <!-- Salutation outside main content div -->
-      <div class="col-lg-9">
-        {% if user.is_authenticated %}
-          <!-- Salutation Card -->
-          <div class="card blue-grey darken-1 white-text" style="max-height: 200px; overflow: auto;">
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="row">
+        <!-- Sidebar with create buttons -->
+        <div class="col-lg-3">
+          <div class="card side-nav-card">
             <div class="card-content">
-              <span class="card-title">
-                {% comment %} Greeting based on the time of day {% endcomment %}
-                {% if current_hour < 12 %}
-                  Good Morning,
-                {% elif current_hour < 18 %}
-                  Good Afternoon,
-                {% else %}
-                  Good Evening,
-                {% endif %}
-                {{ user.username }}!
-              </span>
-              <p>Welcome Back!.</p>
+              <span class="card-title">Actions</span><br>
+              <!-- Dropdown for Create Event -->
+              <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" id="createEventDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-plus-circle"></i> Schedule
+                </a><br><br>
+                <ul class="dropdown-menu" aria-labelledby="createEventDropdown">
+                  <li><a class="dropdown-item" href="{% url 'create_event' %}">Create Event</a></li><br>
+                  <li><a class="dropdown-item" href="{% url 'event_list' %}">List Events</a></li>
+                  <!-- Add more dropdown items as needed -->
+                </ul>
+              </div><br>
+              <!-- Dropdown for Create Livestock -->
+              <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" id="createLivestockDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-plus-circle"></i> Livestock
+                </a><br>
+                <ul class="dropdown-menu" aria-labelledby="createLivestockDropdown">
+                  <li><a class="dropdown-item" href="{% url 'create_livestock' %}">Add Animals</a></li><br>
+                  <li><a class="dropdown-item" href="{% url 'livestock_list' %}">List Animals</a></li>
+                  <!-- Add more dropdown items as needed -->
+                </ul>
+              </div><br><br>
+              <!-- Dropdown for Create Resource -->
+              <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" id="createResourceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-plus-circle"></i> Resources
+                </a><br>
+                <ul class="dropdown-menu" aria-labelledby="createResourceDropdown">
+                  <li><a class="dropdown-item" href="{% url 'add_resource' %}">Create Resource</a></li><br>
+                  <li><a class="dropdown-item" href="{% url 'resource_list' %}">Resource List</a></li>
+                  <!-- Add more dropdown items as needed -->
+                </ul>
+              </div>
             </div>
           </div>
+        </div>
 
-          <!-- Section for Events and Livestock (side by side) -->
-          <div class="row">
-            <!-- Section for Events -->
-            <div class="col-lg-6">
-              <div class="card" style="max-height: 200px; overflow: auto;">
-                <div class="card-content">
-                  <span class="card-title">Your Events</span>
-                  <p>Number of events: {{ event_list|length }}</p>
-                  <ul class="event">
-                    {% for event in event_list|slice:":2" %}
-                      <li>
-                        <a href="{% url 'event_details' pk=event.pk %}">{{ event.title }}</a>
-                        <p>Start date: {{ event.start_date }}</p>
-                        <p>End date: {{ event.end_date }}</p>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                  <a href="{% url 'event_list' %}">See More</a>
+        <!-- Salutation outside the main content div -->
+        <div class="col-lg-9">
+          {% if user.is_authenticated %}
+            <!-- Salutation Card -->
+            <div class="card blue-grey darken-1 white-text" style="max-height: 200px; overflow: auto;">
+              <div class="card-content">
+                <span class="card-title">
+                  {% comment %} Greeting based on the time of day {% endcomment %}
+                  {% if current_hour < 12 %}
+                    Good Morning,
+                  {% elif current_hour < 18 %}
+                    Good Afternoon,
+                  {% else %}
+                    Good Evening,
+                  {% endif %}
+                  {{ user.username }}!
+                </span>
+                <p>Welcome Back!.</p>
+              </div>
+            </div>
+
+            <!-- Section for Events and Livestock (side by side) -->
+            <div class="row">
+              <!-- Section for Events -->
+              <div class="col-lg-6">
+                <div class="card" style="max-height: 200px; overflow: auto;">
+                  <div class="card-content">
+                    <span class="card-title">Your Events</span>
+                    <p>Number of events: {{ event_list|length }}</p>
+                    <ul class="event">
+                      {% for event in event_list|slice:":2" %}
+                        <li>
+                          <a href="{% url 'event_details' pk=event.pk %}">{{ event.title }}</a>
+                          <p>Start date: {{ event.start_date }}</p>
+                          <p>End date: {{ event.end_date }}</p>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                    <a href="{% url 'event_list' %}">See More</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section for Livestock -->
+              <div class="col-lg-6">
+                <div class="card" style="max-height: 200px; overflow: auto;">
+                  <div class="card-content">
+                    <span class="card-title">Your Livestock</span>
+                    <p>Number of livestock: {{ livestock_list|length }}</p>
+                    <ul class="collection">
+                      {% for livestock in livestock_list|slice:":2" %}
+                        <li>
+                          <a href="{% url 'livestock_detail' pk=livestock.pk %}">
+                            <strong>Name: {{ livestock.name }}</strong> - Type:{{ livestock.livestock_type }} ({{ livestock.sex }})
+                          </a>
+                          <br>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                    <a href="{% url 'livestock_list' %}">See More</a>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Section for Livestock -->
+            <!-- Section for Resources -->
             <div class="col-lg-6">
               <div class="card" style="max-height: 200px; overflow: auto;">
                 <div class="card-content">
-                  <span class="card-title">Your Livestock</span>
-                  <p>Number of livestock: {{ livestock_list|length }}</p>
+                  <span class="card-title">Your Resources</span>
+                  <p>Number of resources: {{ resource_list|length }}</p>
                   <ul class="collection">
-                    {% for livestock in livestock_list|slice:":2" %}
+                    {% for resource in resource_list|slice:":2" %}
                       <li>
-                        <a href="{% url 'livestock_detail' pk=livestock.pk %}">
-                          <strong>Name: {{ livestock.name }}</strong> - Type:{{ livestock.livestock_type }} ({{ livestock.sex }})
+                        <a href="{% url 'resource_detail' pk=resource.pk %}">
+                          <strong>Name: {{ resource.name }}</strong> - Type:{{ resource.type }} ({{ resource.quantity }})
                         </a>
                         <br>
                       </li>
                     {% endfor %}
                   </ul>
-                  <a href="{% url 'livestock_list' %}">See More</a>
+                  <a href="{% url 'resource_list' %}">See More</a>
                 </div>
               </div>
             </div>
           </div>
-        {% else %}
-          <div class="card" style="max-height: 200px; overflow: auto;">
-            <div class="card-content">
-              <p>You are not logged in.</p>
-              <a href="{% url 'login' %}" class="waves-effect waves-light btn">Log In</a>
+          {% else %}
+            <div class="card" style="max-height: 200px; overflow: auto;">
+              <div class="card-content">
+                <p>You are not logged in.</p>
+                <a href="{% url 'login' %}" class="waves-effect waves-light btn">Log In</a>
+              </div>
             </div>
-          </div>
-        {% endif %}
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 {% endblock %}

@@ -1,0 +1,30 @@
+<!-- resource_list.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Resource List | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Resource List</h2>
+    <ul class="collection">
+        <p>Number of resources: {{ resource_list|length }}</p>
+      {% for resource in resource_list %}
+        <li class="collection-item">
+          <strong>{{ resource.name }}</strong> - {{ resource.type }}
+          <br>
+          Description: {{ resource.description }}
+          <br>
+          Quantity: {{ resource.quantity }}
+          <br>
+          Location: {{ resource.location }}
+          <br>
+          <a href="{% url 'resource_detail' resource.id %}">Details</a>
+        </li>
+      {% empty %}
+        <li class="collection-item">No resource records found.</li>
+      {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}" class="waves-effect waves-light btn">Back Home</a>
+  </div>
+{% endblock %}

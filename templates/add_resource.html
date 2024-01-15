@@ -1,0 +1,60 @@
+<!-- create_resource.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Create Resource | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Create a Resource</h2>
+    <div class="row">
+      <form class="col s12" method="post" action="{% url 'add_resource' %}">
+        {% csrf_token %}
+        <!-- Include a hidden input field for the user -->
+        <input type="hidden" name="user" value="{{ request.user.id }}">
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="name" type="text" class="validate" name="name" required>
+            <label for="name">Name</label>
+          </div>
+        </div>
+        <!-- Type Dropdown -->
+    <div class="row">
+      <div class="input-field col s12">
+          <select id="type" name="type" class="browser-default" required>
+              <option value="" disabled selected>Select Type</option>
+              <option value="equipment">Equipment</option>
+              <option value="warehouse">Warehouse</option>
+              <option value="inventory">Inventory</option>
+              <!-- Add more options as needed -->
+          </select>
+      </div>
+    </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <textarea id="description" class="materialize-textarea validate" name="description" required></textarea>
+            <label for="description">Description</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="quantity" type="number" class="validate" name="quantity" required>
+            <label for="quantity">Quantity</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="location" type="text" class="validate" name="location" required>
+            <label for="location">Location</label>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn waves-effect waves-light" type="submit">Create Resource</button>
+          <a href="" class="waves-effect waves-light btn-flat right">Back to Resource List</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

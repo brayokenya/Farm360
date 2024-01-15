@@ -17,7 +17,7 @@ from django.views.generic import (
     DeleteView, 
     UpdateView
 )
-from .models import Event, Livestock
+from .models import Event, Livestock, Resource
 
 
 
@@ -70,12 +70,15 @@ class DashboardView(LoginRequiredMixin, View):
         """
         events = Event.objects.filter(user=request.user).order_by('-id')
         livestock = Livestock.objects.filter(user=request.user).order_by('-id')
+        resource = Resource.objects.filter(user=request.user).order_by('-id')
         current_hour = timezone.localtime(timezone.now()).hour
 
         context = {
             'current_hour': current_hour,
             'event_list': events,
             'livestock_list': livestock,
+            'resource_list': resource,
+    
         }
 
         return render(request, self.template_name, context)
@@ -425,3 +428,86 @@ class LivestockDeleteView(LoginRequiredMixin, DeleteView):
             str: URL for redirection.
         """
         return reverse_lazy("livestock_list")
+
+
+
+## Resources
+
+class ResourceCreateView(LoginRequiredMixin, CreateView):
+    """
+    View for creating a new Resource record.
+
+    Attributes:
+        model (class): Django model class for Resource.
+        template_name (str): HTML template for the Resource creation form.
+        fields (list): List of fields to include in the form.
+    """
+
+    model = Resource
+    template_name = "add_resource.html"
+    fields = "__all__"
+
+    def form_valid(self, form):
+        """
+        Validate the Resource creation form.
+
+        Args:
+            form (Form): Django form instance.
+
+        Returns:
+            HttpResponse: Form validation result.
+        """
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        """
+        Get the URL to redirect after successful Livestock creation.
+
+        Returns:
+            str: URL for redirection.
+        """
+        return reverse_lazy("resource_list")
+
+
+
+class ResourceListView(LoginRequiredMixin, ListView):
+    """
+    View for displaying a list of Resource records.
+
+    Attributes:
+        model (class): Django model class for Resource.
+        template_name (str): HTML template for the list of Resource records.
+        context_object_name (str): Name of the context variable for the Resource list.
+    """
+
+    model = Resource
+    template_name = 'resource_list.html'  
+    context_object_name = 'resource_list'
+
+    def get_queryset(self):
+        """
+        Get the queryset for the list of Livestock records.
+
+        Returns:
+            QuerySet: List of Livestock objects.
+        """
+        # Filter the queryset based on the logged-in user
+        return Resource.objects.filter(user=self.request.user).order_by('-id')
+
+
+
+
+class ResourceDetailView(DetailView):
+    """
+    View for displaying details of a Resource record.
+
+    Attributes:
+        model (class): Django model class for Resource.
+        template_name (str): HTML template for the Resource details.
+        context_object_name (str): Name of the context variable for the Resource object.
+    """
+
+    model = Resource
+    template_name = 'resource_detail.html'
+    context_object_name = 'resource'

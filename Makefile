@@ -12,6 +12,10 @@ install:
 run:
 	python manage.py runserver
 
+# Run make migrations
+makemigrations:
+	python manage.py makemigrations
+
 # Run migrations
 migrate:
 	python manage.py migrate
