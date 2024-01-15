@@ -1,61 +1,66 @@
-# Tissue Sample Collection Web Application
+# Farm360 Web Application
 
 ## Overview
 
-This web application provides an administrative interface for managing a Tissue Sample directory. Users can view collections, drill into collection details, add new samples to existing collections, and create new collections.
+Farm360 is a comprehensive web application designed to streamline farm management by providing an intuitive administrative interface. Users can efficiently manage their farm-related data, including events, livestock, and resources. The application offers features such as creating and scheduling events, tracking livestock details, and managing farm resources like equipment and inventory.
 
 ## Requirements
 
 The minimum viable product includes the following features:
 
-- Display a list of collections on the home page (including their title and associated disease).
-- Drill into a collection’s record to view the details of their currently associated samples.
-- Add a new sample to an existing collection.
-- Create a new collection.
+- Display a list of upcoming events and essential details on the home page.
+- Efficiently manage livestock records, including details like name, type, sex, and status.
+- Track and monitor available resources such as equipment, warehouses, and inventory.
+- Create new events, add livestock records, and manage resources seamlessly.
 
 ## Entities & Data
 
-### Collections
+### Events
 
-| Id | Disease Term | Title                                |
-|----|--------------|--------------------------------------|
-| 1  | Cirrhosis of liver | Mothers Pregnancy Samples     |
-| 2  | Malignant tumour of breast | Phase II multicentre study  |
-| 3  | Fit and well | Lymphoblastoid cell lines           |
-| 4  | Chronic fatigue syndrome | Samples available include ME/CFS Cases |
-| 5  | Malignant tumour of breast | A randomised placebo-controlled trial |
+| Id | Title                | Start Date  | End Date    |
+|----|----------------------|-------------|-------------|
+| 1  | Harvest Festival     | 2024-09-15  | 2024-09-17  |
+| 2  | Livestock Vaccination| 2024-08-20  | 2024-08-20  |
+| 3  | Crop Planting        | 2024-10-01  | 2024-10-05  |
 
-### Samples
+### Livestock
 
-| Id | Collection_Id | Donor_Count | Material_Type         | Last_Updated |
-|----|---------------|-------------|------------------------|--------------|
-| 1  | 4             | 90210       | Cerebrospinal fluid    | 2019-06-03   |
-| 2  | 2             | 512         | Cerebrospinal fluid    | 2019-03-08   |
-| 3  | 2             | 7777        | Core biopsy            | 2019-05-04   |
+| Id | Name    | Livestock Type | Sex    | Status  |
+|----|---------|-----------------|--------|---------|
+| 1  | Cow1    | Dairy           | Female | Active  |
+| 2  | Chicken2| Poultry         | Male   | Active  |
+| 3  | Pig3    | Swine           | Female | Inactive|
+
+### Resources
+
+| Id | Name         | Type      | Description                  | Quantity | Location      |
+|----|--------------|-----------|------------------------------|----------|---------------|
+| 1  | Tractor      | Equipment | Farming Tractor              | 2        | Equipment Shed|
+| 2  | Fertilizer   | Inventory | Organic Fertilizer           | 100 bags | Warehouse A   |
+| 3  | Greenhouse   | Warehouse | Automated Plant Growth       | 1        | Greenhouse 1  |
 
 ## Project Structure
 
-- **/Tissue-Sample-Collection-master**: Root directory of the project.
-  - **/Farm360**: Source code for the web application.
-  - **/templates**: HTML templates.
-  - **/static**: Static files (CSS, JavaScript).
-  - **/venv**: Virtual environment for Python dependencies.
-  - **/requirements.txt**: List of project dependencies.
-  - **/manage.py**: Django management script.
-  - **/README.md**: Project documentation.
+- **/Farm360**: Source code for the Farm360 web application.
+- **/templates**: HTML templates.
+- **/static**: Static files (CSS, JavaScript).
+- **/venv**: Virtual environment for Python dependencies.
+- **/requirements.txt**: List of project dependencies.
+- **/manage.py**: Django management script.
+- **/README.md**: Project documentation.
 
 ## How to Execute the Project
 
 1. Clone the repository:
 
-   ```
-   git clone https://github.com/brayokenya/Tissue-Sample-Collection.git
+   ```bash
+   git clone https://github.com/brayokenya/Farm360.git
 
 
     # Navigate to the project directory
-    cd Tissue-Sample-Collection/
+    cd Farm360/
 
-    # Set up a virtual environment (optional but recommended)
+    # Set up a virtual environment
     make venv
 
     # Activate the virtual environment
@@ -80,15 +85,14 @@ The minimum viable product includes the following features:
 ## Hosted Version
 
 ```
-  https://brian2541.pythonanywhere.com/
+    https://brian2541.pythonanywhere.com/
 
 ```
 ## Future Plans
 
 
-1. Ensure Collections and samples can only be deleted by their sole creators(Users that created the collections)
+1. Ensure Events, Livestock, and Resources can only be deleted by their sole creators (Users that created them).
 
-2. Dockerize the Application for easier Deployment
+2. Dockerize the Application for easier Deployment.
 
-3. Use it as a learning tool to improve and maintain the current existing system at 
-https://www.nottingham.ac.uk/
+3. Use actual weather data from satelites to guide farmers on when to plant, harvest or vaccinate
