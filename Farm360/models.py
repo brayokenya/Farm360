@@ -70,3 +70,35 @@ class Resource(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+class Transaction(models.Model):
+    TRANSACTION_TYPE_CHOICES = [
+        ('expense', 'Expense'),
+        ('income', 'Income'),
+    ]
+
+    TYPE_OF_TRANSACTION_CHOICES = [
+        ('buying_vaccination_drugs', 'Buying Vaccination Drugs'),
+        ('fuel', 'Fuel'),
+        ('electricity', 'Electricity'),
+        ('water_bill', 'Water Bill'),
+        ('selling_eggs', 'Selling Eggs'),
+        ('selling_cows_and_goats', 'Selling Cows and Goats'),
+        # Add more choices as needed
+    ]
+
+    type_of_transaction = models.CharField(max_length=10, choices=TRANSACTION_TYPE_CHOICES)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payee_customer = models.CharField(max_length=255)
+    transaction_category = models.CharField(max_length=50, choices=TYPE_OF_TRANSACTION_CHOICES)
+    date = models.DateField()
+    description = models.TextField()
+    attachment = models.FileField(upload_to='attachments/', blank=True, null=True)
+
+    def has_attachment(self):
+        return bool(self.attachment)
+
+    def __str__(self):
+        return f"{self.get_type_of_transaction_display()} - {self.payee_customer}"

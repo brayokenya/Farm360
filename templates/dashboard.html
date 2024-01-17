@@ -46,6 +46,17 @@
                   <li><a class="dropdown-item" href="{% url 'resource_list' %}">Resource List</a></li>
                   <!-- Add more dropdown items as needed -->
                 </ul>
+              </div><br><br>
+              <!-- Dropdown for Create Transactions -->
+              <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" id="createResourceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-plus-circle"></i> Accounting
+                </a><br>
+                <ul class="dropdown-menu" aria-labelledby="createResourceDropdown">
+                  <li><a class="dropdown-item" href="{% url 'create_transaction' %}">Create Transaction</a></li><br>
+                  <li><a class="dropdown-item" href="{% url 'transaction_list' %}">Transaction List</a></li>
+                  <!-- Add more dropdown items as needed -->
+                </ul>
               </div>
             </div>
           </div>

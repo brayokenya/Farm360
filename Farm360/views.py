@@ -4,21 +4,21 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.utils import timezone
 from datetime import datetime
 from django.views.generic import (
-    ListView, 
-    DetailView, 
-    CreateView, 
-    DeleteView, 
+    ListView,
+    DetailView,
+    CreateView,
+    DeleteView,
     UpdateView
 )
-from .models import Event, Livestock, Resource
-
+from .models import Event, Livestock, Resource, Transaction
+from .forms import TransactionForm
 
 
 class IndexView(View):
@@ -78,7 +78,7 @@ class DashboardView(LoginRequiredMixin, View):
             'event_list': events,
             'livestock_list': livestock,
             'resource_list': resource,
-    
+
         }
 
         return render(request, self.template_name, context)
@@ -153,7 +153,7 @@ class EventCreateView(LoginRequiredMixin, CreateView):
         result = super().form_valid(form)
         messages.success(self.request, 'Event created successfully.')
         return result
-    
+
     def form_invalid(self, form):
         """
         Handle cases where the Event creation form is invalid.
@@ -188,8 +188,6 @@ class EventListView(LoginRequiredMixin, ListView):
     model = Event
     template_name = "event_list.html"
     context_object_name = 'event_list'
-    
-
 
     def get_queryset(self):
         """
@@ -199,7 +197,6 @@ class EventListView(LoginRequiredMixin, ListView):
             QuerySet: List of Event objects.
         """
         return Event.objects.filter(user=self.request.user).order_by('-id')
-   
 
 
 class EventDetailView(DetailView):
@@ -266,7 +263,7 @@ class EventUpdateView(LoginRequiredMixin, UpdateView):
 
     model = Event
     template_name = "update_event.html"
-    fields =  ["title", "start_date", "end_date", "description"]
+    fields = ["title", "start_date", "end_date", "description"]
 
     def form_valid(self, form):
         """
@@ -339,7 +336,7 @@ class LivestockListView(LoginRequiredMixin, ListView):
     """
 
     model = Livestock
-    template_name = 'livestock_list.html'  
+    template_name = 'livestock_list.html'
     context_object_name = 'livestock_list'
 
     def get_queryset(self):
@@ -368,8 +365,6 @@ class LivestockDetailView(DetailView):
     context_object_name = 'livestock'
 
 
-
-
 class LivestockUpdateView(LoginRequiredMixin, UpdateView):
     """
     View for updating a Livestock record.
@@ -381,8 +376,9 @@ class LivestockUpdateView(LoginRequiredMixin, UpdateView):
     """
 
     model = Livestock
-    template_name = "update_livestock.html" 
-    fields =  ["livestock_type", "name", "sex", "identification_number",  "status", "physical_characteristics", "birth_date", "vet_contacts"]
+    template_name = "update_livestock.html"
+    fields = ["livestock_type", "name", "sex", "identification_number",
+              "status", "physical_characteristics", "birth_date", "vet_contacts"]
 
     def form_valid(self, form):
         """
@@ -406,8 +402,6 @@ class LivestockUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy("livestock_detail", kwargs={"pk": self.object.pk})
 
 
-
-
 class LivestockDeleteView(LoginRequiredMixin, DeleteView):
     """
     View for deleting a Livestock record.
@@ -418,7 +412,7 @@ class LivestockDeleteView(LoginRequiredMixin, DeleteView):
     """
 
     model = Livestock
-    template_name = "confirm_delete.html"  
+    template_name = "confirm_delete.html"
 
     def get_success_url(self):
         """
@@ -430,8 +424,7 @@ class LivestockDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy("livestock_list")
 
 
-
-## Resources
+# Resources
 
 class ResourceCreateView(LoginRequiredMixin, CreateView):
     """
@@ -470,7 +463,6 @@ class ResourceCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy("resource_list")
 
 
-
 class ResourceListView(LoginRequiredMixin, ListView):
     """
     View for displaying a list of Resource records.
@@ -482,7 +474,7 @@ class ResourceListView(LoginRequiredMixin, ListView):
     """
 
     model = Resource
-    template_name = 'resource_list.html'  
+    template_name = 'resource_list.html'
     context_object_name = 'resource_list'
 
     def get_queryset(self):
@@ -494,8 +486,6 @@ class ResourceListView(LoginRequiredMixin, ListView):
         """
         # Filter the queryset based on the logged-in user
         return Resource.objects.filter(user=self.request.user).order_by('-id')
-
-
 
 
 class ResourceDetailView(DetailView):
@@ -524,8 +514,8 @@ class ResourceUpdateView(LoginRequiredMixin, UpdateView):
     """
 
     model = Resource
-    template_name = "update_resource.html" 
-    fields =  ["name", "type", "description", "quantity",  "location"]
+    template_name = "update_resource.html"
+    fields = ["name", "type", "description", "quantity",  "location"]
 
     def form_valid(self, form):
         """
@@ -548,7 +538,7 @@ class ResourceUpdateView(LoginRequiredMixin, UpdateView):
             str: URL for redirection.
         """
         return reverse_lazy("resource_detail", kwargs={"pk": self.object.pk})
-    
+
 
 class ResourceDeleteView(LoginRequiredMixin, DeleteView):
     """
@@ -572,3 +562,38 @@ class ResourceDeleteView(LoginRequiredMixin, DeleteView):
         messages.success(self.request, 'Resource deleted successfully.')
         return reverse_lazy("home")
 
+
+# Transactions View
+class TransactionCreateView(View):
+    template_name = 'create_transaction.html'
+
+    def get(self, request, *args, **kwargs):
+        form = TransactionForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = TransactionForm(request.POST, request.FILES)  # Pass request.FILES to handle file uploads
+        if form.is_valid():
+            form.save()
+            return redirect('transaction_list')  # Redirect to the list view
+        return render(request, self.template_name, {'form': form})
+
+
+class TransactionListView(ListView):
+    model = Transaction
+    template_name = 'transaction_list.html'
+    context_object_name = 'transactions'
+    # Order transactions by date, you can change this based on your needs
+    ordering = ['-date']
+    
+    
+
+class TransactionDetailView(DetailView):
+    model = Transaction
+    template_name = 'transaction_detail.html'
+    context_object_name = 'transaction'
+
+class TransactionDeleteView(DeleteView):
+    model = Transaction
+    template_name = 'confirm_transaction_delete.html'
+    success_url = reverse_lazy('transaction_list')

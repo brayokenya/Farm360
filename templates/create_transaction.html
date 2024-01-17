@@ -1,0 +1,96 @@
+<!-- create_transaction.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Transaction | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Create Transaction</h2>
+    <form class="col s12" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="row">
+        <div class="col s12">
+          <label for="id_transaction_type" class="form-label">Transaction Type</label>
+          <select id="id_transaction_type" name="type_of_transaction" class="form-select" required>
+            <option value="" disabled selected>Select Transaction Type</option>
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <label for="id_amount" class="form-label">Amount</label>
+          <input type="number" id="id_amount" name="amount" step="0.01" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <label for="id_payee" class="form-label">Payee/Customer</label>
+          <input type="text" id="id_payee" name="payee_customer" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <label for="id_category" class="form-label">Category</label>
+          <select id="id_category" name="transaction_category" class="selectpicker form-control" required>
+            <option value="" disabled selected>Select Category</option>
+            <option value="buying_vaccination_drugs">Buying Vaccination Drugs</option>
+            <option value="fuel">Fuel</option>
+            <option value="electricity">Electricity</option>
+            <option value="water_bill">Water Bill</option>
+            <option value="selling_eggs">Selling Eggs</option>
+            <option value="selling_cows_and_goats">Selling Cows and Goats</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <label for="id_date" class="form-label">Date</label>
+          <input type="date" id="id_date" name="date" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <label for="id_description" class="form-label">Description</label>
+          <textarea id="id_description" name="description" class="form-control" required></textarea>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <label for="attachment" class="form-label">Attachment</label>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="attachment" name="attachment">
+            <label class="custom-file-label" for="attachment">Choose file</label>
+          </div>
+        </div>
+      </div>
+      
+
+      <div class="row">
+        <div class="col s12">
+          <button type="submit" class="btn btn-primary">Create Transaction</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Include Bootstrap JS and Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.6.0/dist/js/bootstrap.min.js"></script>
+
+  <!-- Initialize Bootstrap selectpicker -->
+  <script>
+    $(document).ready(function () {
+      $('.selectpicker').selectpicker();
+    });
+  </script>
+{% endblock %}

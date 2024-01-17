@@ -1,10 +1,12 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from .views import (
     SignUpView, ProfileView, EventListView, EventCreateView, EventDeleteView, 
     EventUpdateView, IndexView, EventDetailView, LivestockCreateView, 
     LivestockListView, LivestockDetailView, DashboardView, LivestockUpdateView, 
     LivestockDeleteView, ResourceCreateView, ResourceListView, ResourceDetailView,
-    ResourceUpdateView, ResourceDeleteView
+    ResourceUpdateView, ResourceDeleteView, TransactionCreateView, TransactionListView, TransactionDetailView, TransactionDeleteView
 )
 
 urlpatterns = [
@@ -32,10 +34,16 @@ urlpatterns = [
     path('resource/<int:pk>/edit/', ResourceUpdateView.as_view(), name='resource_update'),
     path('resource/<int:pk>/delete/', ResourceDeleteView.as_view(), name='resource_delete'),
 
-
-
+    #Transactions
+    path('transaction/create/', TransactionCreateView.as_view(), name='create_transaction'),
+    path('transactions/', TransactionListView.as_view(), name='transaction_list'),
+    path('transaction/<int:pk>/', TransactionDetailView.as_view(), name='transaction_detail'),
+    path('transaction/<int:pk>/delete/', TransactionDeleteView.as_view(), name='delete_transaction'),
 
 
 ]
 
 
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
