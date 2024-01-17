@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Transaction Details | Farm 360{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="teal-text text-darken-2">Transaction Details</h2>
+
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">
+          Transaction Details
+        </span>
+        <p><strong>Type:</strong> {{ transaction.get_type_of_transaction_display }}</p>
+        <p><strong>Category:</strong> {{ transaction.get_transaction_category_display }}</p>
+        <p><strong>Amount:</strong> {{ transaction.amount }}</p>
+        <p><strong>Payee/Customer:</strong> {{ transaction.payee_customer }}</p>
+        <p><strong>Date:</strong> {{ transaction.date }}</p>
+        <p><strong>Description:</strong> {{ transaction.description }}</p>
+
+        {% if transaction.attachment %}
+          <p><strong>Attachment:</strong> <a href="{{ transaction.attachment.url }}" target="_blank">View Attachment</a></p>
+        {% else %}
+          <p><strong>Attachment:</strong> No Attachment</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <a href="{% url 'transaction_list' %}" class="btn btn-primary">Back to Transaction List</a>
+  </div>
+{% endblock %}

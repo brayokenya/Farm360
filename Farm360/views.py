@@ -71,6 +71,8 @@ class DashboardView(LoginRequiredMixin, View):
         events = Event.objects.filter(user=request.user).order_by('-id')
         livestock = Livestock.objects.filter(user=request.user).order_by('-id')
         resource = Resource.objects.filter(user=request.user).order_by('-id')
+        accounting = Transaction.objects.filter(user=request.user).order_by('-id')
+
         current_hour = timezone.localtime(timezone.now()).hour
 
         context = {
@@ -78,6 +80,7 @@ class DashboardView(LoginRequiredMixin, View):
             'event_list': events,
             'livestock_list': livestock,
             'resource_list': resource,
+            'accounting': accounting,
 
         }
 

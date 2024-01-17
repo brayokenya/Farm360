@@ -88,7 +88,7 @@ class Transaction(models.Model):
         ('selling_cows_and_goats', 'Selling Cows and Goats'),
         # Add more choices as needed
     ]
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     type_of_transaction = models.CharField(max_length=10, choices=TRANSACTION_TYPE_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payee_customer = models.CharField(max_length=255)
