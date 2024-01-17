@@ -176,23 +176,46 @@
             <!-- Section for Weather (dummy data) -->
             <div class="row">
               <div class="col-lg-12">
-                <div class="card" style="max-height: 200px; overflow: auto;">
+                <div class="card" style="max-height: 400px; overflow: auto;">
                   <div class="card-content">
                     <span class="card-title">Weather for the Week</span>
-                    <p>Dummy Weather Data:</p>
-                    <ul>
-                      <li>Monday: Sunny, 25°C</li>
-                      <li>Tuesday: Partly Cloudy, 22°C</li>
-                      <li>Wednesday: Rainy, 18°C</li>
-                      <li>Thursday: Cloudy, 20°C</li>
-                      <li>Friday: Sunny, 27°C</li>
-                      <li>Saturday: Thunderstorms, 15°C</li>
-                      <li>Sunday: Clear Sky, 28°C</li>
-                    </ul>
+                    <canvas id="weatherChart"></canvas>
                   </div>
                 </div>
               </div>
             </div>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              // Dummy weather data
+              const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+              const temperatures = [25, 22, 18, 20, 27, 15, 28];
+
+              // Chart.js configuration
+              const ctx = document.getElementById('weatherChart').getContext('2d');
+              const weatherChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: days,
+                  datasets: [{
+                    label: 'Temperature (°C)',
+                    data: temperatures,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }
+              });
+            });
+            </script>
+
 
           {% else %}
             <div class="card" style="max-height: 200px; overflow: auto;">
